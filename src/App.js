@@ -1,4 +1,4 @@
-import './App.css';
+import './App.scss';
 import { GUESSES_ALLOWED, WORD_LENGTH } from './gameLogic';
 import Gameboard from './Gameboard';
 import Keyboard from './Keyboard';

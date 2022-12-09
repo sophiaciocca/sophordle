@@ -1,4 +1,4 @@
-import './Keyboard.css';
+import './Keyboard.scss';
 import { GUESSES_ALLOWED, WORD_LENGTH } from './gameLogic';
 
 const letters = [

@@ -1,4 +1,4 @@
-import './Gameboard.css';
+import './Gameboard.scss';
 import { GUESSES_ALLOWED, WORD_LENGTH } from './gameLogic';
 
 function Gameboard() {
