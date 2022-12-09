@@ -18,11 +18,14 @@ function Gameboard(props) {
         {currentGuess.map((letter, letterIndex) => (
           <div className="letterbox" key={letterIndex}>{letter}</div>
         ))}
+        {[...Array(WORD_LENGTH - currentGuess.length)].map((arrayElem, boxIndex) => (
+          <div className="letterbox" key={boxIndex}></div>
+        ))}
       </div>
       {[...Array(remainingEmptyRows)].map((arrayElem, rowIndex) => (
         <div className="row" key={rowIndex}>
           {[...Array(WORD_LENGTH)].map((arrayElem, boxIndex) => (
-            <div className="letterbox" id={`letterbox-${rowIndex}-${boxIndex}`} key={boxIndex}></div>
+            <div className="letterbox" key={boxIndex}></div>
           ))}
         </div>
       ))}
