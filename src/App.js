@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
-import { GUESSES_ALLOWED } from './gameLogic';
+import { GUESSES_ALLOWED, WORD_LENGTH } from './gameLogic';
+import Gameboard from './Gameboard';
 
 function App() {
   return (
@@ -8,12 +9,8 @@ function App() {
       <header className="App-header">
         Sophordle
       </header>
-      <div className="gameboard">
-          {[...Array(GUESSES_ALLOWED)].map((elementInArray, index) => (
-            <div className="row" key={index}>
-              row here
-            </div>
-        ))}
+      <div className="App-body">
+        <Gameboard />
       </div>
     </div>
   );
