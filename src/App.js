@@ -29,14 +29,14 @@ function App() {
   const randomSeed = generateRandomSeedFromDate();
   const guessesRemaining = GUESSES_ALLOWED - guessNumber;
   console.log('GUESSES REMAINING: ', guessesRemaining);
-  const [gameOver, setGameOver] = useState(false);
+  const [wonGame, setWonGame] = useState(false);
+  const [lostGame, setLostGame] = useState(false);
 
-  let correctAnswer = WORDS[Math.floor(seedrandom(randomSeed)() * WORDS.length)]
-  console.log(correctAnswer);
+  const correctAnswer = WORDS[Math.floor(seedrandom(randomSeed)() * WORDS.length)]
 
   const handleKeyUp = (e) => {
     const { key } = e;
-    if (gameOver) { // if game is over, just return
+    if (wonGame || lostGame) { // if game is over, just return
       return;
     } else if (key === 'Enter') { // if they press "enter", enter a guess
       submitGuess();
@@ -50,39 +50,31 @@ function App() {
   useEffect(() => {
     // create event listener for keyboard events
     window.document.addEventListener('keyup', handleKeyUp);
-    console.log('event listener created.');
     return () => {
       window.document.removeEventListener('keyup', handleKeyUp);
-      console.log('event listener removed.');
     }
   }, [currentGuess]);
 
   const insertLetter = (letter) => {
-    // if we're out of space, can't insert more letters
-    console.log('IN INSERT LETTER. current guess length? ', currentGuess);
-    if (currentGuess.length === 5) {
-      console.log('out of space, cant insert letter');
+    if (currentGuess.length === 5) { // if we're out of space, can't insert more letters
       return;
     }
-    console.log('inserting letter!: ', letter);
     setCurrentGuess((oldCurrentGuess) => [...oldCurrentGuess, letter]);
   }
 
   const deleteLetter = () => {
     if (!currentGuess.length) {
-      console.log('nothing to delete; do nothing');
       return;
     }
-    console.log('deleting letter!');
     setCurrentGuess((oldCurrentGuess) => oldCurrentGuess.slice(0, -1));
   }
 
   function submitGuess() {
-    console.log('submitting guess!!');
-    console.log('****currentGuess:: ', currentGuess);
+    if (currentGuess.length !== 5) {
+      return;
+    }
     // move current guess to past guesses!
     setPastGuesses((prevPastGuesses) => {
-      console.log('prev past guesses: ', prevPastGuesses);
       const newArr = [...prevPastGuesses, [...currentGuess]]
       return newArr;
     });
@@ -90,7 +82,8 @@ function App() {
     setCurrentGuess([]);
     // (if it was guess 6, set gameOver to true)
     if (guessNumber === 6) {
-      setGameOver(true);
+      // TODO: if word is wrong, set lost. if word is right, set won
+      setLostGame(true);
     } else { // otherwise, increase guess number
       setGuessNumber((prevGuessNumber) => prevGuessNumber++);
     }
@@ -103,7 +96,7 @@ function App() {
       </header>
       <div className="App-body">
         <Gameboard currentGuess={currentGuess} pastGuesses={pastGuesses} />
-        <Keyboard />
+        <Keyboard insertLetter={insertLetter} deleteLetter={deleteLetter} submitGuess={submitGuess} />
       </div>
     </div>
   );
