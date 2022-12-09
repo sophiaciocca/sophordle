@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './Gameboard.css';
 import { GUESSES_ALLOWED, WORD_LENGTH } from './gameLogic';
 
