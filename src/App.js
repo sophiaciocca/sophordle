@@ -29,36 +29,38 @@ function App() {
   const randomSeed = generateRandomSeedFromDate();
   const guessesRemaining = GUESSES_ALLOWED - guessNumber;
   console.log('GUESSES REMAINING: ', guessesRemaining);
+  const [gameOver, setGameOver] = useState(false);
 
   let correctAnswer = WORDS[Math.floor(seedrandom(randomSeed)() * WORDS.length)]
   console.log(correctAnswer);
 
+  const handleKeyUp = (e) => {
+    const { key } = e;
+    if (gameOver) { // if game is over, just return
+      return;
+    } else if (key === 'Enter') { // if they press "enter", enter a guess
+      submitGuess();
+    } else if (key === 'Backspace') { // if they press "delete", delete a letter
+      deleteLetter();
+    } else if ((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 97 && e.keyCode <= 122)) { // if they press a letter, insert letter
+      insertLetter(key);
+    }
+  }
+
   useEffect(() => {
     // create event listener for keyboard events
-    const handleKeyUp = (e) => {
-      const { key } = e;
-      if (!guessesRemaining) { // if guesses remaining = 0, just return
-        return;
-      } else if (key === 'Enter') { // if they press "enter", enter a guess
-        submitGuess();
-      } else if (key === 'Backspace') { // if they press "delete", delete a letter
-        deleteLetter();
-      } else if ((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 97 && e.keyCode <= 122)) { // if they press a letter, insert letter
-        insertLetter(key);
-      }
-    }
     window.document.addEventListener('keyup', handleKeyUp);
     console.log('event listener created.');
     return () => {
       window.document.removeEventListener('keyup', handleKeyUp);
       console.log('event listener removed.');
     }
-  }, []);
+  }, [currentGuess]);
 
   const insertLetter = (letter) => {
     // if we're out of space, can't insert more letters
     console.log('IN INSERT LETTER. current guess length? ', currentGuess);
-    if (currentGuess.length >= 4) {
+    if (currentGuess.length === 5) {
       console.log('out of space, cant insert letter');
       return;
     }
@@ -75,8 +77,23 @@ function App() {
     setCurrentGuess((oldCurrentGuess) => oldCurrentGuess.slice(0, -1));
   }
 
-  const submitGuess = () => {
+  function submitGuess() {
     console.log('submitting guess!!');
+    console.log('****currentGuess:: ', currentGuess);
+    // move current guess to past guesses!
+    setPastGuesses((prevPastGuesses) => {
+      console.log('prev past guesses: ', prevPastGuesses);
+      const newArr = [...prevPastGuesses, [...currentGuess]]
+      return newArr;
+    });
+    // reset currentGuess to empty array
+    setCurrentGuess([]);
+    // (if it was guess 6, set gameOver to true)
+    if (guessNumber === 6) {
+      setGameOver(true);
+    } else { // otherwise, increase guess number
+      setGuessNumber((prevGuessNumber) => prevGuessNumber++);
+    }
   }
 
   return (
