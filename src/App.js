@@ -20,20 +20,22 @@ const generateRandomSeedFromDate = () => {
 
 function App() {
 
-  const [ guessesRemaining, setGuessesRemaining ] = useState(GUESSES_ALLOWED);
-  console.log('GUESSES REMAINING: ', guessesRemaining);
-  const [ currentGuess, setCurrentGuess ] = useState([]);
+  const [guessNumber, setGuessNumber] = useState(0);
+  console.log('GUESS NUMBER: ', guessNumber);
+  const [currentGuess, setCurrentGuess] = useState([]);
+  const [pastGuesses, setPastGuesses] = useState([]);
   console.log('CURRENT GUESS: ', currentGuess);
+  console.log('PAST GUESSES: ', pastGuesses);
   const randomSeed = generateRandomSeedFromDate();
+  const guessesRemaining = GUESSES_ALLOWED - guessNumber;
+  console.log('GUESSES REMAINING: ', guessesRemaining);
 
-  let nextLetter = 0;
   let correctAnswer = WORDS[Math.floor(seedrandom(randomSeed)() * WORDS.length)]
   console.log(correctAnswer);
 
   useEffect(() => {
     // create event listener for keyboard events
     const handleKeyUp = (e) => {
-      console.log('IN HANDLE KEY UP! e: ', e)
       const { key } = e;
       if (!guessesRemaining) { // if guesses remaining = 0, just return
         return;
@@ -53,17 +55,24 @@ function App() {
     }
   }, []);
 
-  const insertLetter = (pressedKey) => {
+  const insertLetter = (letter) => {
     // if we're out of space, can't insert more letters
-    if (nextLetter === 5) {
+    console.log('IN INSERT LETTER. current guess length? ', currentGuess);
+    if (currentGuess.length >= 4) {
+      console.log('out of space, cant insert letter');
       return;
     }
-    pressedKey = pressedKey.toLowerCase()
-    console.log('inserting letter!: ', pressedKey);
+    console.log('inserting letter!: ', letter);
+    setCurrentGuess((oldCurrentGuess) => [...oldCurrentGuess, letter]);
   }
 
   const deleteLetter = () => {
+    if (!currentGuess.length) {
+      console.log('nothing to delete; do nothing');
+      return;
+    }
     console.log('deleting letter!');
+    setCurrentGuess((oldCurrentGuess) => oldCurrentGuess.slice(0, -1));
   }
 
   const submitGuess = () => {
@@ -76,7 +85,7 @@ function App() {
         Sophordle
       </header>
       <div className="App-body">
-        <Gameboard />
+        <Gameboard currentGuess={currentGuess} pastGuesses={pastGuesses} />
         <Keyboard />
       </div>
     </div>

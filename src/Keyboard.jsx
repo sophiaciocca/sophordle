@@ -10,9 +10,9 @@ function Keyboard() {
   return (
     <div className="keyboard">
       {letters.map((rowLetters, rowIndex) => (
-        <div className="keyboard-row" index={rowIndex}>
+        <div className="keyboard-row" key={rowIndex}>
           {rowLetters.map((letter, letterIndex) => (
-            <button className="keyboard-button" index={letterIndex}>{letter}</button>
+            <button className="keyboard-button" key={letterIndex}>{letter}</button>
           ))}
         </div>
       ))}
