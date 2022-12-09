@@ -1,5 +1,4 @@
 import './Keyboard.scss';
-import { GUESSES_ALLOWED, WORD_LENGTH } from './gameLogic';
 
 const letters = [
   ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],

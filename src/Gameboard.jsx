@@ -1,5 +1,5 @@
 import './Gameboard.scss';
-import { GUESSES_ALLOWED, WORD_LENGTH } from './gameLogic';
+import { GUESSES_ALLOWED, WORD_LENGTH } from './App';
 
 function Gameboard() {
   return (
