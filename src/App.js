@@ -21,7 +21,9 @@ const generateRandomSeedFromDate = () => {
 function App() {
 
   const [ guessesRemaining, setGuessesRemaining ] = useState(GUESSES_ALLOWED);
+  console.log('GUESSES REMAINING: ', guessesRemaining);
   const [ currentGuess, setCurrentGuess ] = useState([]);
+  console.log('CURRENT GUESS: ', currentGuess);
   const randomSeed = generateRandomSeedFromDate();
 
   let nextLetter = 0;
@@ -31,11 +33,17 @@ function App() {
   useEffect(() => {
     // create event listener for keyboard events
     const handleKeyUp = (e) => {
-      console.log('IN HANDLE KEY UP!')
-      // if guesses remaining = 0, just return
-      // if they press "enter", enter a guess
-      // if they press "delete", delete a letter
-      // if they press a letter, insert letter
+      console.log('IN HANDLE KEY UP! e: ', e)
+      const { key } = e;
+      if (!guessesRemaining) { // if guesses remaining = 0, just return
+        return;
+      } else if (key === 'Enter') { // if they press "enter", enter a guess
+        submitGuess();
+      } else if (key === 'Backspace') { // if they press "delete", delete a letter
+        deleteLetter();
+      } else if ((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 97 && e.keyCode <= 122)) { // if they press a letter, insert letter
+        insertLetter(key);
+      }
     }
     window.document.addEventListener('keyup', handleKeyUp);
     console.log('event listener created.');
@@ -46,18 +54,21 @@ function App() {
   }, []);
 
   const insertLetter = (pressedKey) => {
+    // if we're out of space, can't insert more letters
     if (nextLetter === 5) {
-        return
+      return;
     }
     pressedKey = pressedKey.toLowerCase()
+    console.log('inserting letter!: ', pressedKey);
+  }
 
-    let row = document.getElementsByClassName("letter-row")[6 - guessesRemaining]
-    let box = row.children[nextLetter]
-    box.textContent = pressedKey
-    box.classList.add("filled-box")
-    currentGuess.push(pressedKey)
-    nextLetter += 1
-}
+  const deleteLetter = () => {
+    console.log('deleting letter!');
+  }
+
+  const submitGuess = () => {
+    console.log('submitting guess!!');
+  }
 
   return (
     <div className="App">
