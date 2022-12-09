@@ -17,6 +17,10 @@ function Keyboard() {
           ))}
         </div>
       ))}
+      <div className="keyboard-row">
+        <button className="keyboard-button">del</button>
+        <button className="keyboard-button">enter</button>
+      </div>
     </div>
   );
 }
