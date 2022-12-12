@@ -11,24 +11,24 @@ export const LETTER_STATUS_OPTIONS = {
 };
 
 function Letterbox(props) {
-  const { letter, letterIndex, status } = props;
+  const { letter, status } = props;
   return (
     <div className={classNames({
       'letterbox': true,
       'inplace': status === LETTER_STATUS_OPTIONS.inPlace,
       'outofplace': status === LETTER_STATUS_OPTIONS.outOfPlace,
       'incorrect': status === LETTER_STATUS_OPTIONS.incorrect,
-    })} key={letterIndex}>{letter}</div>
+    })}>{letter}</div>
   )
 }
 
 function CompletedRow(props) {
-  const { pastGuess, rowIndex, solution } = props;
+  const { pastGuess, solution } = props;
   const statuses = getGuessStatus(solution, pastGuess);
   return (
-    <div className="row" key={rowIndex}>
+    <div className="row">
       {pastGuess.map((letter, letterIndex) => (
-        <Letterbox status={statuses[letterIndex]} letter={letter} letterIndex={letterIndex}/>
+        <Letterbox status={statuses[letterIndex]} letter={letter} key={letterIndex}/>
       ))}
     </div>
   )
@@ -41,20 +41,20 @@ function Gameboard(props) {
   return (
     <div className="gameboard">
       {pastGuesses.map((pastGuess, rowIndex) => (
-        <CompletedRow pastGuess={pastGuess} rowIndex={rowIndex} solution={solution} />
+        <CompletedRow pastGuess={pastGuess} key={rowIndex} solution={solution} />
       ))}
       <div className="row">
         {currentGuess.map((letter, letterIndex) => (
-          <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} letter={letter} letterIndex={letterIndex}/>
+          <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} key={letterIndex} letter={letter} letterIndex={letterIndex}/>
         ))}
         {!!remainingLettersInGuess && [...Array(remainingLettersInGuess)].map((arrayElem, letterIndex) => (
-          <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} letter={arrayElem} letterIndex={letterIndex}/>
+          <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} key={letterIndex} letter={arrayElem} letterIndex={letterIndex}/>
         ))}
       </div>
       {!!remainingEmptyRows && [...Array(remainingEmptyRows)].map((arrayElem, rowIndex) => (
         <div className="row" key={rowIndex}>
           {[...Array(WORD_LENGTH)].map((arrayElem, letterIndex) => (
-            <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} letter={arrayElem} letterIndex={letterIndex}/>
+            <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} key={letterIndex} letter={arrayElem} letterIndex={letterIndex}/>
           ))}
         </div>
       ))}
