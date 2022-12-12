@@ -43,7 +43,7 @@ function Gameboard(props) {
       {pastGuesses.map((pastGuess, rowIndex) => (
         <CompletedRow pastGuess={pastGuess} key={rowIndex} solution={solution} />
       ))}
-      <div className={classNames({
+      {pastGuesses.length < GUESSES_ALLOWED && <div className={classNames({
         'row': true,
         'cantsubmit': cantSubmit === true,
       })}>
@@ -53,8 +53,8 @@ function Gameboard(props) {
         {!!remainingLettersInGuess && [...Array(remainingLettersInGuess)].map((arrayElem, letterIndex) => (
           <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} key={letterIndex} letter={arrayElem} letterIndex={letterIndex}/>
         ))}
-      </div>
-      {!!remainingEmptyRows && [...Array(remainingEmptyRows)].map((arrayElem, rowIndex) => (
+      </div>}
+      {remainingEmptyRows > 0 && [...Array(remainingEmptyRows)].map((arrayElem, rowIndex) => (
         <div className="row" key={rowIndex}>
           {[...Array(WORD_LENGTH)].map((arrayElem, letterIndex) => (
             <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} key={letterIndex} letter={arrayElem} letterIndex={letterIndex}/>
