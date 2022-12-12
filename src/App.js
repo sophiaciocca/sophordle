@@ -43,7 +43,7 @@ function App() {
 
   const handleKeyUp = (e) => {
     const { key } = e;
-    if (wonGame || lostGame) { // if game is over, just return
+    if (wonGame || lostGame) { // if game is over, disable gameplay
       return;
     } else if (key === 'Enter') { // if they press "enter", enter a guess
       submitGuess();
@@ -98,6 +98,11 @@ function App() {
       }, "3000");
       return;
     }
+    // check if correct - if so, set message & disable game
+    if (currentGuess.join('') === solution) {
+      setWonGame(true);
+      setMessage(MESSAGES.youWon);
+    }
     // move current guess to past guesses!
     setPastGuesses((prevPastGuesses) => {
       const newArr = [...prevPastGuesses, [...currentGuess]]
@@ -105,14 +110,13 @@ function App() {
     });
     // update letter statuses/colors in keyboard
     updateLetterStatuses(currentGuess);
-    // reset currentGuess to empty array
-    setCurrentGuess([]);
     // (if it was guess 6, set gameOver to true)
     if (guessNumber === 6) {
-      // TODO: if word is wrong, set lost. if word is right, set won
       setLostGame(true);
+      setMessage(MESSAGES.youLost);
     } else { // otherwise, increase guess number
       setGuessNumber((prevGuessNumber) => prevGuessNumber++);
+      setCurrentGuess([]);
     }
   }
 
