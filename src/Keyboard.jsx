@@ -10,13 +10,13 @@ const letters = [
 ];
 
 function Keyboard(props) {
-  const { insertLetter, deleteLetter, submitGuess } = props;
+  const { insertLetter, deleteLetter, submitGuess, letterStatuses } = props;
   return (
     <div className="keyboard">
       {letters.map((rowLetters, rowIndex) => (
         <div className="keyboard-row" key={rowIndex}>
           {rowLetters.map((letter, letterIndex) => {
-            const status = getKeyStatus(letter);
+            const status = letterStatuses.get(letter);
             return (
               <button className={classNames({
                 'keyboard-button': true,

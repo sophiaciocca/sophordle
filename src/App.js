@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { WORDS } from "./words";
 import Gameboard from './Gameboard';
 import Keyboard from './Keyboard';
+import { generateLetterStatusMap, getLetterStatus } from './gameLogicUtils';
 import './App.scss';
 let seedrandom = require('seedrandom');
 
@@ -31,7 +32,7 @@ function App() {
   console.log('GUESSES REMAINING: ', guessesRemaining);
   const [wonGame, setWonGame] = useState(false);
   const [lostGame, setLostGame] = useState(false);
-
+  const [letterStatuses, setLetterStatuses] = useState(generateLetterStatusMap());
   const solution = WORDS[Math.floor(seedrandom(randomSeed)() * WORDS.length)]
 
   const handleKeyUp = (e) => {
@@ -69,7 +70,15 @@ function App() {
     setCurrentGuess((oldCurrentGuess) => oldCurrentGuess.slice(0, -1));
   }
 
-  function submitGuess() {
+  const updateLetterStatuses = (guess) => {
+    guess.forEach((letter, index) => {
+      const letterStatus = getLetterStatus(letter, index, solution);
+      // to preserve immutability, set state to a *new* map based off of the old one
+      setLetterStatuses(new Map(letterStatuses.set(letter, letterStatus)));
+    });
+  }
+
+  const submitGuess = () => {
     if (currentGuess.length !== 5) {
       return;
     }
@@ -78,6 +87,8 @@ function App() {
       const newArr = [...prevPastGuesses, [...currentGuess]]
       return newArr;
     });
+    // update letter statuses/colors in keyboard
+    updateLetterStatuses(currentGuess);
     // reset currentGuess to empty array
     setCurrentGuess([]);
     // (if it was guess 6, set gameOver to true)
@@ -96,7 +107,7 @@ function App() {
       </header>
       <div className="App-body">
         <Gameboard currentGuess={currentGuess} pastGuesses={pastGuesses} solution={solution} />
-        <Keyboard insertLetter={insertLetter} deleteLetter={deleteLetter} submitGuess={submitGuess} />
+        <Keyboard insertLetter={insertLetter} deleteLetter={deleteLetter} submitGuess={submitGuess} letterStatuses={letterStatuses} />
       </div>
     </div>
   );
