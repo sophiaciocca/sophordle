@@ -19,5 +19,19 @@
       align-items: center;
       text-transform: uppercase;
     }
+
+    .inplace {
+      background: green;
+      color: white;
+    }
+
+    .outofplace {
+      background: yellow;
+    }
+
+    .incorrect {
+      background: #5A5A5A;
+      color: white;
+    }
   }
 }

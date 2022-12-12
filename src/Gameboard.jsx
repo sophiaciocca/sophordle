@@ -1,11 +1,23 @@
-import './Gameboard.scss';
+import classNames from 'classnames/bind';
 import { GUESSES_ALLOWED, WORD_LENGTH } from './App';
+import './Gameboard.scss';
+
+const LETTER_STATUS_OPTIONS = {
+  unguessed: 'UNGUESSED',
+  inPlace: 'INPLACE',
+  outOfPlace: 'OUTOFPLACE',
+  incorrect: 'INCORRECT',
+};
 
 function Letterbox(props) {
-  const { letter, letterIndex } = props;
-  console.log('PROPS IN LETTERBOX: ', props);
+  const { letter, letterIndex, status } = props;
   return (
-    <div className="letterbox" key={letterIndex}>{letter}</div>
+    <div className={classNames({
+      'letterbox': true,
+      'inplace': status === LETTER_STATUS_OPTIONS.inPlace,
+      'outofplace': status === LETTER_STATUS_OPTIONS.outOfPlace,
+      'incorrect': status === LETTER_STATUS_OPTIONS.incorrect,
+    })} key={letterIndex}>{letter}</div>
   )
 }
 
@@ -18,22 +30,22 @@ function Gameboard(props) {
       {pastGuesses.map((pastGuess, rowIndex) => (
         <div className="row" key={rowIndex}>
           {pastGuess.map((letter, letterIndex) => (
-            <Letterbox letter={letter} letterIndex={letterIndex}/>
+            <Letterbox status={LETTER_STATUS_OPTIONS.inPlace} letter={letter} letterIndex={letterIndex}/>
           ))}
         </div>
       ))}
       <div className="row">
         {currentGuess.map((letter, letterIndex) => (
-          <Letterbox letter={letter} letterIndex={letterIndex}/>
+          <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} letter={letter} letterIndex={letterIndex}/>
         ))}
         {!!remainingLettersInGuess && [...Array(remainingLettersInGuess)].map((arrayElem, letterIndex) => (
-          <Letterbox letter={arrayElem} letterIndex={letterIndex}/>
+          <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} letter={arrayElem} letterIndex={letterIndex}/>
         ))}
       </div>
       {!!remainingEmptyRows && [...Array(remainingEmptyRows)].map((arrayElem, rowIndex) => (
         <div className="row" key={rowIndex}>
           {[...Array(WORD_LENGTH)].map((arrayElem, letterIndex) => (
-            <Letterbox letter={arrayElem} letterIndex={letterIndex}/>
+            <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} letter={arrayElem} letterIndex={letterIndex}/>
           ))}
         </div>
       ))}
