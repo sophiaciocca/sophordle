@@ -20,4 +20,41 @@
       text-transform: uppercase;
     }
   }
+
+  .cantsubmit {
+    -webkit-animation: jiggle 7s infinite;
+    -moz-animation: jiggle 7s infinite;
+    animation: jiggle 7s infinite;
+  }
+}
+
+// animations taken from this codepen: https://codepen.io/olehpratsko/pen/GpEbZa
+@-webkit-keyframes jiggle {
+  0%, 5.2%, 100% { margin-left: 0px;}
+  0.4%  {margin-left: -3px;}
+  1.2%  {margin-left: 3px;}
+  2%  {margin-left: -3px;}
+  2.8%  {margin-left: 3px;}
+  3.6%  {margin-left: -3px;}
+  4.4%  {margin-left: 3px;}
+}
+
+@-moz-keyframes jiggle {
+  0%, 5.2%, 100% { margin-left: 0px;}
+  0.4%  {margin-left: -3px;}
+  1.2%  {margin-left: 3px;}
+  2%  {margin-left: -3px;}
+  2.8%  {margin-left: 3px;}
+  3.6%  {margin-left: -3px;}
+  4.4%  {margin-left: 3px;}
+}
+
+@keyframes jiggle {
+  0%, 5.2%, 100% { margin-left: 0px;}
+  0.4%  {margin-left: -3px;}
+  1.2%  {margin-left: 3px;}
+  2%  {margin-left: -3px;}
+  2.8%  {margin-left: 3px;}
+  3.6%  {margin-left: -3px;}
+  4.4%  {margin-left: 3px;}
 }

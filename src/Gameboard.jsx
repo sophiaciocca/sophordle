@@ -35,7 +35,7 @@ function CompletedRow(props) {
 }
 
 function Gameboard(props) {
-  const { currentGuess, pastGuesses, solution } = props;
+  const { currentGuess, pastGuesses, solution, cantSubmit } = props;
   const remainingEmptyRows = GUESSES_ALLOWED - 1 - pastGuesses.length;
   const remainingLettersInGuess = WORD_LENGTH - currentGuess.length;
   return (
@@ -43,7 +43,10 @@ function Gameboard(props) {
       {pastGuesses.map((pastGuess, rowIndex) => (
         <CompletedRow pastGuess={pastGuess} key={rowIndex} solution={solution} />
       ))}
-      <div className="row">
+      <div className={classNames({
+        'row': true,
+        'cantsubmit': cantSubmit === true,
+      })}>
         {currentGuess.map((letter, letterIndex) => (
           <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} key={letterIndex} letter={letter} letterIndex={letterIndex}/>
         ))}

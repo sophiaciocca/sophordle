@@ -26,13 +26,14 @@ function App() {
   const [currentGuess, setCurrentGuess] = useState([]);
   const [pastGuesses, setPastGuesses] = useState([]);
   const randomSeed = generateRandomSeedFromDate();
-  const guessesRemaining = GUESSES_ALLOWED - guessNumber;
   const [wonGame, setWonGame] = useState(false);
   const [lostGame, setLostGame] = useState(false);
   const [letterStatuses, setLetterStatuses] = useState(generateLetterStatusMap());
   const [message, setMessage] = useState(null);
+  const [cantSubmit, setCantSubmit] = useState(false);
 
   const solution = WORDS[Math.floor(seedrandom(randomSeed)() * WORDS.length)]
+  const guessesRemaining = GUESSES_ALLOWED - guessNumber;
 
   const MESSAGES = {
     notEnoughLetters: 'Not enough letters!',
@@ -86,7 +87,11 @@ function App() {
   const submitGuess = () => {
     if (currentGuess.length !== 5) {
       setMessage(MESSAGES.notEnoughLetters);
-      setTimeout(() => setMessage(null), "3000");
+      setCantSubmit(true);
+      setTimeout(() => {
+        setMessage(null);
+        setCantSubmit(false);
+      }, "3000");
       return;
     }
     // move current guess to past guesses!
@@ -114,7 +119,7 @@ function App() {
       </header>
       <div className="App-body">
         {!!message && <Message message={message}/>}
-        <Gameboard currentGuess={currentGuess} pastGuesses={pastGuesses} solution={solution} />
+        <Gameboard currentGuess={currentGuess} pastGuesses={pastGuesses} solution={solution} cantSubmit={cantSubmit} />
         <Keyboard insertLetter={insertLetter} deleteLetter={deleteLetter} submitGuess={submitGuess} letterStatuses={letterStatuses} />
       </div>
     </div>
