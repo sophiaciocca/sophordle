@@ -3,6 +3,7 @@ import { WORDS } from "./words";
 import Gameboard from './Gameboard';
 import Keyboard from './Keyboard';
 import { generateLetterStatusMap, getLetterStatus } from './gameLogicUtils';
+import Message from './Message';
 import './App.scss';
 let seedrandom = require('seedrandom');
 
@@ -22,18 +23,22 @@ const generateRandomSeedFromDate = () => {
 function App() {
 
   const [guessNumber, setGuessNumber] = useState(0);
-  console.log('GUESS NUMBER: ', guessNumber);
   const [currentGuess, setCurrentGuess] = useState([]);
   const [pastGuesses, setPastGuesses] = useState([]);
-  console.log('CURRENT GUESS: ', currentGuess);
-  console.log('PAST GUESSES: ', pastGuesses);
   const randomSeed = generateRandomSeedFromDate();
   const guessesRemaining = GUESSES_ALLOWED - guessNumber;
-  console.log('GUESSES REMAINING: ', guessesRemaining);
   const [wonGame, setWonGame] = useState(false);
   const [lostGame, setLostGame] = useState(false);
   const [letterStatuses, setLetterStatuses] = useState(generateLetterStatusMap());
+  const [message, setMessage] = useState(null);
+
   const solution = WORDS[Math.floor(seedrandom(randomSeed)() * WORDS.length)]
+
+  const MESSAGES = {
+    notEnoughLetters: 'Not enough letters!',
+    youLost: `You lost! The word was ${solution.toUpperCase()}`,
+    youWon: 'You won! Congratulations!',
+  }
 
   const handleKeyUp = (e) => {
     const { key } = e;
@@ -80,6 +85,8 @@ function App() {
 
   const submitGuess = () => {
     if (currentGuess.length !== 5) {
+      setMessage(MESSAGES.notEnoughLetters);
+      setTimeout(() => setMessage(null), "3000");
       return;
     }
     // move current guess to past guesses!
@@ -106,6 +113,7 @@ function App() {
         Sophordle
       </header>
       <div className="App-body">
+        {!!message && <Message message={message}/>}
         <Gameboard currentGuess={currentGuess} pastGuesses={pastGuesses} solution={solution} />
         <Keyboard insertLetter={insertLetter} deleteLetter={deleteLetter} submitGuess={submitGuess} letterStatuses={letterStatuses} />
       </div>
