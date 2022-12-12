@@ -1,3 +1,6 @@
+import classNames from 'classnames/bind';
+import { LETTER_STATUS_OPTIONS } from './Gameboard';
+import { getKeyStatus } from './gameLogicUtils';
 import './Keyboard.scss';
 
 const letters = [
@@ -12,9 +15,16 @@ function Keyboard(props) {
     <div className="keyboard">
       {letters.map((rowLetters, rowIndex) => (
         <div className="keyboard-row" key={rowIndex}>
-          {rowLetters.map((letter, letterIndex) => (
-            <button className="keyboard-button" key={letterIndex} onClick={() => insertLetter(letter)}>{letter}</button>
-          ))}
+          {rowLetters.map((letter, letterIndex) => {
+            const status = getKeyStatus(letter);
+            return (
+              <button className={classNames({
+                'keyboard-button': true,
+                'inplace': status === LETTER_STATUS_OPTIONS.inPlace,
+                'outofplace': status === LETTER_STATUS_OPTIONS.outOfPlace,
+                'incorrect': status === LETTER_STATUS_OPTIONS.incorrect,
+              })} key={letterIndex} onClick={() => insertLetter(letter)}>{letter}</button>
+          )})}
         </div>
       ))}
       <div className="keyboard-row">

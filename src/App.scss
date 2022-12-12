@@ -14,5 +14,19 @@
 
   .App-body {
     margin: 15vmin;
+
+    .inplace {
+      background: green;
+      color: white;
+    }
+
+    .outofplace {
+      background: yellow;
+    }
+
+    .incorrect {
+      background: #5A5A5A;
+      color: white;
+    }
   }
 }

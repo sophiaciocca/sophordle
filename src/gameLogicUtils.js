@@ -17,3 +17,7 @@ export const getGuessStatus = (solution, guess) => {
 
   return guessStatus;
 }
+
+export const getKeyStatus = (solution, pastGuesses) => {
+  return LETTER_STATUS_OPTIONS.inPlace;
+}
