@@ -32,7 +32,7 @@ function App() {
   const [wonGame, setWonGame] = useState(false);
   const [lostGame, setLostGame] = useState(false);
 
-  const correctAnswer = WORDS[Math.floor(seedrandom(randomSeed)() * WORDS.length)]
+  const solution = WORDS[Math.floor(seedrandom(randomSeed)() * WORDS.length)]
 
   const handleKeyUp = (e) => {
     const { key } = e;
@@ -95,7 +95,7 @@ function App() {
         Sophordle
       </header>
       <div className="App-body">
-        <Gameboard currentGuess={currentGuess} pastGuesses={pastGuesses} />
+        <Gameboard currentGuess={currentGuess} pastGuesses={pastGuesses} solution={solution} />
         <Keyboard insertLetter={insertLetter} deleteLetter={deleteLetter} submitGuess={submitGuess} />
       </div>
     </div>

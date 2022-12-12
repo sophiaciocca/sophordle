@@ -1,8 +1,9 @@
 import classNames from 'classnames/bind';
 import { GUESSES_ALLOWED, WORD_LENGTH } from './App';
+import { getGuessStatus } from './gameLogicUtils';
 import './Gameboard.scss';
 
-const LETTER_STATUS_OPTIONS = {
+export const LETTER_STATUS_OPTIONS = {
   unguessed: 'UNGUESSED',
   inPlace: 'INPLACE',
   outOfPlace: 'OUTOFPLACE',
@@ -21,18 +22,26 @@ function Letterbox(props) {
   )
 }
 
+function CompletedRow(props) {
+  const { pastGuess, rowIndex, solution } = props;
+  const statuses = getGuessStatus(solution, pastGuess);
+  return (
+    <div className="row" key={rowIndex}>
+      {pastGuess.map((letter, letterIndex) => (
+        <Letterbox status={statuses[letterIndex]} letter={letter} letterIndex={letterIndex}/>
+      ))}
+    </div>
+  )
+}
+
 function Gameboard(props) {
-  const { currentGuess, pastGuesses } = props;
+  const { currentGuess, pastGuesses, solution } = props;
   const remainingEmptyRows = GUESSES_ALLOWED - 1 - pastGuesses.length;
   const remainingLettersInGuess = WORD_LENGTH - currentGuess.length;
   return (
     <div className="gameboard">
       {pastGuesses.map((pastGuess, rowIndex) => (
-        <div className="row" key={rowIndex}>
-          {pastGuess.map((letter, letterIndex) => (
-            <Letterbox status={LETTER_STATUS_OPTIONS.inPlace} letter={letter} letterIndex={letterIndex}/>
-          ))}
-        </div>
+        <CompletedRow pastGuess={pastGuess} rowIndex={rowIndex} solution={solution} />
       ))}
       <div className="row">
         {currentGuess.map((letter, letterIndex) => (
