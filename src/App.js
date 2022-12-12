@@ -22,7 +22,7 @@ const generateRandomSeedFromDate = () => {
 
 function App() {
 
-  const [guessNumber, setGuessNumber] = useState(0);
+  const [guessNumber, setGuessNumber] = useState(1);
   const [currentGuess, setCurrentGuess] = useState([]);
   const [pastGuesses, setPastGuesses] = useState([]);
   const randomSeed = generateRandomSeedFromDate();
@@ -33,7 +33,7 @@ function App() {
   const [cantSubmit, setCantSubmit] = useState(false);
 
   const solution = WORDS[Math.floor(seedrandom(randomSeed)() * WORDS.length)]
-  const guessesRemaining = GUESSES_ALLOWED - guessNumber;
+  const guessesRemaining = GUESSES_ALLOWED - pastGuesses.length;
 
   const MESSAGES = {
     notEnoughLetters: 'Not enough letters!',
@@ -110,12 +110,12 @@ function App() {
     });
     // update letter statuses/colors in keyboard
     updateLetterStatuses(currentGuess);
-    // (if it was guess 6, set gameOver to true)
+    // (if it was the last guess, set gameOver to true)
     if (guessNumber === 6) {
       setLostGame(true);
       setMessage(MESSAGES.youLost);
     } else { // otherwise, increase guess number
-      setGuessNumber((prevGuessNumber) => prevGuessNumber++);
+      setGuessNumber(prevGuessNumber => prevGuessNumber + 1);
       setCurrentGuess([]);
     }
   }
