@@ -64,6 +64,10 @@ function App() {
 
   const insertLetter = (letter) => {
     if (currentGuess.length === 5) { // if we're out of space, can't insert more letters
+      setCantSubmit(true);
+      setTimeout(() => {
+        setCantSubmit(false);
+      }, "3000");
       return;
     }
     setCurrentGuess((oldCurrentGuess) => [...oldCurrentGuess, letter]);
