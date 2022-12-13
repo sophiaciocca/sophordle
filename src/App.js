@@ -21,7 +21,6 @@ const generateRandomSeedFromDate = () => {
 }
 
 function App() {
-
   const [guessNumber, setGuessNumber] = useState(1);
   const [currentGuess, setCurrentGuess] = useState([]);
   const [pastGuesses, setPastGuesses] = useState([]);
