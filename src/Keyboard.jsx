@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import { LETTER_STATUS_OPTIONS } from './Gameboard';
 import './Keyboard.scss';
 
-const letters = [
+export const letters = [
   ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
   ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
   ['z', 'x', 'c', 'v', 'b', 'n', 'm']
