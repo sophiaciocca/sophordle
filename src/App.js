@@ -36,10 +36,19 @@ function App() {
   const guessesRemaining = GUESSES_ALLOWED - pastGuesses.length;
 
   const MESSAGES = {
-    notEnoughLetters: 'Not enough letters!',
-    youLost: `You lost! The word was ${solution.toUpperCase()}`,
-    youWon: 'You won! Congratulations!',
-  }
+    notEnoughLetters: {
+      text: 'Not enough letters!',
+      type: 'error',
+    },
+    youLost: {
+      text: `You lost! The word was ${solution.toUpperCase()}`,
+      type: 'loss',
+    },
+    youWon: {
+      text: 'You won! Congratulations!',
+      type: 'success',
+    },
+  };
 
   const handleKeyUp = (e) => {
     const { key } = e;

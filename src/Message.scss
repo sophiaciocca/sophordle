@@ -4,7 +4,7 @@
 
   .message {
     border-radius: 3px;
-    background-color: purple;
+    background-color: black;
     color: white;
     padding: 0.5rem;
     font-weight: bold;
@@ -14,5 +14,17 @@
     left: 0;
     right: 0;
     text-align: center;
+  }
+
+  .success {
+    background: green;
+  }
+
+  .error {
+    background: purple;
+  }
+
+  .loss {
+    background: red;
   }
 }
