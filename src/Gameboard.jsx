@@ -18,7 +18,7 @@ function Letterbox(props) {
       'inplace': status === LETTER_STATUS_OPTIONS.inPlace,
       'outofplace': status === LETTER_STATUS_OPTIONS.outOfPlace,
       'incorrect': status === LETTER_STATUS_OPTIONS.incorrect,
-    })}>{letter}</div>
+    })} data-testid="letterbox">{letter}</div>
   )
 }
 
@@ -28,7 +28,7 @@ function CompletedRow(props) {
   return (
     <div className="row">
       {pastGuess.map((letter, letterIndex) => (
-        <Letterbox status={statuses[letterIndex]} letter={letter} key={letterIndex}/>
+        <Letterbox status={statuses[letterIndex]} letter={letter} key={letterIndex} />
       ))}
     </div>
   )
@@ -48,16 +48,16 @@ function Gameboard(props) {
         'cantsubmit': cantSubmit === true,
       })}>
         {currentGuess.map((letter, letterIndex) => (
-          <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} key={letterIndex} letter={letter} letterIndex={letterIndex}/>
+          <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} key={letterIndex} letter={letter} letterIndex={letterIndex} />
         ))}
         {!!remainingLettersInGuess && [...Array(remainingLettersInGuess)].map((arrayElem, letterIndex) => (
-          <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} key={letterIndex} letter={arrayElem} letterIndex={letterIndex}/>
+          <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} key={letterIndex} letter={arrayElem} letterIndex={letterIndex} />
         ))}
       </div>}
       {remainingEmptyRows > 0 && [...Array(remainingEmptyRows)].map((arrayElem, rowIndex) => (
         <div className="row" key={rowIndex}>
           {[...Array(WORD_LENGTH)].map((arrayElem, letterIndex) => (
-            <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} key={letterIndex} letter={arrayElem} letterIndex={letterIndex}/>
+            <Letterbox status={LETTER_STATUS_OPTIONS.unguessed} key={letterIndex} letter={arrayElem} letterIndex={letterIndex} />
           ))}
         </div>
       ))}
