@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { WORDS } from "./words";
 import Gameboard from './Gameboard';
 import Keyboard from './Keyboard';
@@ -32,7 +32,6 @@ function App() {
   const [cantSubmit, setCantSubmit] = useState(false);
 
   const solution = WORDS[Math.floor(seedrandom(randomSeed)() * WORDS.length)]
-  const guessesRemaining = GUESSES_ALLOWED - pastGuesses.length;
 
   const MESSAGES = {
     notEnoughLetters: {
@@ -49,28 +48,7 @@ function App() {
     },
   };
 
-  const handleKeyUp = (e) => {
-    const { key } = e;
-    if (wonGame || lostGame) { // if game is over, disable gameplay
-      return;
-    } else if (key === 'Enter') { // if they press "enter", enter a guess
-      submitGuess();
-    } else if (key === 'Backspace') { // if they press "delete", delete a letter
-      deleteLetter();
-    } else if ((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 97 && e.keyCode <= 122)) { // if they press a letter, insert letter
-      insertLetter(key);
-    }
-  }
-
-  useEffect(() => {
-    // create event listener for keyboard events
-    window.document.addEventListener('keyup', handleKeyUp);
-    return () => {
-      window.document.removeEventListener('keyup', handleKeyUp);
-    }
-  }, [currentGuess]);
-
-  const insertLetter = (letter) => {
+  const insertLetter = useCallback((letter) => {
     if (currentGuess.length === 5) { // if we're out of space, can't insert more letters
       setCantSubmit(true);
       setTimeout(() => {
@@ -79,24 +57,24 @@ function App() {
       return;
     }
     setCurrentGuess((oldCurrentGuess) => [...oldCurrentGuess, letter]);
-  }
+  }, [currentGuess.length]);
 
-  const deleteLetter = () => {
+  const deleteLetter = useCallback(() => {
     if (!currentGuess.length) {
       return;
     }
     setCurrentGuess((oldCurrentGuess) => oldCurrentGuess.slice(0, -1));
-  }
+  }, [currentGuess.length]);
 
-  const updateLetterStatuses = (guess) => {
+  const updateLetterStatuses = useCallback((guess) => {
     guess.forEach((letter, index) => {
       const letterStatus = getLetterStatus(letter, index, solution);
       // to preserve immutability, set state to a *new* map based off of the old one
       setLetterStatuses(new Map(letterStatuses.set(letter, letterStatus)));
     });
-  }
+  }, [letterStatuses, solution]);
 
-  const submitGuess = () => {
+  const submitGuess = useCallback(() => {
     if (currentGuess.length !== 5) {
       setMessage(MESSAGES.notEnoughLetters);
       setCantSubmit(true);
@@ -126,7 +104,28 @@ function App() {
       setGuessNumber(prevGuessNumber => prevGuessNumber + 1);
       setCurrentGuess([]);
     }
-  }
+  }, [currentGuess, solution, guessNumber, updateLetterStatuses, MESSAGES.notEnoughLetters, MESSAGES.youLost, MESSAGES.youWon]);
+
+  useEffect(() => {
+    const handleKeyUp = (e) => {
+      const { key } = e;
+      if (wonGame || lostGame) { // if game is over, disable gameplay
+        return;
+      } else if (key === 'Enter') { // if they press "enter", enter a guess
+        submitGuess();
+      } else if (key === 'Backspace') { // if they press "delete", delete a letter
+        deleteLetter();
+      } else if ((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 97 && e.keyCode <= 122)) { // if they press a letter, insert letter
+        insertLetter(key);
+      }
+    }
+
+    // create event listener for keyboard events
+    window.document.addEventListener('keyup', handleKeyUp);
+    return () => {
+      window.document.removeEventListener('keyup', handleKeyUp);
+    }
+  }, [currentGuess, deleteLetter, insertLetter, submitGuess, lostGame, wonGame]);
 
   return (
     <div className="App">
@@ -134,7 +133,7 @@ function App() {
         Sophordle
       </header>
       <div className="App-body">
-        {!!message && <Message message={message}/>}
+        {!!message && <Message message={message} />}
         <Gameboard currentGuess={currentGuess} pastGuesses={pastGuesses} solution={solution} cantSubmit={cantSubmit} />
         <Keyboard insertLetter={insertLetter} deleteLetter={deleteLetter} submitGuess={submitGuess} letterStatuses={letterStatuses} />
       </div>
